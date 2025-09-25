@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>withfamily — Streaming Service</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+
+    <style>
+        /* CSS Variables for consistent theming */
+        :root {
+            --brand-primary: #0f1724;
+            --brand-accent: #e50914;
+            --text-primary: #e6eef8;
+            --text-secondary: #9aa7bf;
+            --card-bg: rgba(255, 255, 255, 0.03);
+        }
+
+        /* Base styles */
+        body {
+            background: linear-gradient(180deg, rgba(15, 23, 36, 1) 0%, rgba(8, 10, 16, 1) 100%);
+            color: var(--text-primary);
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+
+
+
+
+        /* Hero section 
+        .hero {
+            min-height: 60vh;
+            background-image: url(Img1.jpg);
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            background-image: url('https://e0.pxfuel.com/wallpapers/903/42/desktop-wallpaper-cinema-black-lightning-power-model-man-movie-face-hero-asian-film-warrior-chinese-oriental-asiatic-for-section-%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D1%8B.jpg');
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 0.85) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .badge-new {
+            background: var(--brand-accent);
+            color: white;
+            border-radius: 20px;
+            padding: 0.25rem 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+*/
+        /* Content sections */
+        .section-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        /* Movie cards */
+        .movie-card {
+            background: transparent;
+            border: none;
+            transition: transform 0.2s;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .movie-card img {
+            border-radius: 6px;
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.7);
+        }
+
+        .movie-title {
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            color: #dbeafe;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Horizontal scroll for continue watching */
+        .scroll-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            scrollbar-width: thin;
+        }
+
+        .scroll-item {
+            min-width: 200px;
+            flex-shrink: 0;
+        }
+
+        /* Buttons */
+        .btn-primary-custom {
+            background: white;
+            color: var(--brand-primary);
+            border: none;
+        }
+
+        .btn-primary-custom:hover {
+            background: #f0f0f0;
+        }
+
+        .btn-accent {
+            background: var(--brand-accent);
+            color: white;
+            border: none;
+        }
+
+        .btn-accent:hover {
+            background: #c40811;
+        }
+
+        /* Footer */
+        footer {
+            color: var(--text-secondary);
+            padding: 2rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 992px) {
+            .hero {
+                min-height: 70vh;
+            }
+
+            .movie-card img {
+                height: 210px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-content h1 {
+                font-size: 1.75rem;
+            }
+
+            .hero-content p {
+                max-width: 100% !important;
+            }
+
+            .navbar-nav {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <style>
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0));
+            backdrop-filter: blur(6px);
+
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .navbar-brand span {
+            color: var(--brand-accent);
+        }
+    </style>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="Logo.webp" alt="RISTAV logo" class="me-2 rounded"
+                    style="width:36px;height:36px;object-fit:cover;">
+                <span>withfamily</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNav" style="margin-left: 150px; ">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">TV Shows</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Movies</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Short Movies</a></li>
+                </ul>
+
+                <div class="d-flex align-items-center">
+                    <form class="d-flex me-3" role="search">
+                        <div class="input-group">
+                            <input id="searchInput" class="form-control form-control-sm" type="search"
+                                placeholder="Search">
+                            <button class="btn btn-sm btn-outline-light" type="button" onclick="doSearch()">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-sm btn-outline-light me-2" data-bs-toggle="modal"
+                            data-bs-target="#loginModal">
+                            Sign In
+                        </button>
+                        <button class="btn btn-sm btn-accent">Get Premium</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <style>
+        .hero {
+
+            position: relative;
+            width: 100%;
+            height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .video-background iframe {
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            /* disable clicking on video */
+            object-fit: cover;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            /* dark overlay for text visibility */
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+    <!-- Hero Section -->
+    <section class="hero">
+        <!-- YouTube video -->
+        <div class="video-background">
+            <video autoplay muted loop playsinline class="bg-video">
+                <source src="video/video1.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <!-- Hero Content -->
+        <div class="hero-content">
+            <h1>Welcome to withfamily</h1>
+            <p>Streaming starts here</p>
+            <button class="btn btn-lg btn-accent">Explore</button>
+        </div>
+    </section>
+
+
+
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Continue Watching -->
+        <section class="mb-5  mt-3">
+            <h4 class="section-title">Continue Watching</h4>
+            <div class="scroll-container">
+                <div class="scroll-item">
+                    <a href="login.html" style="text-decoration: none;">
+                        <div class="movie-card" style="position: relative; display: inline-block;">
+
+                            <!-- Movie Poster -->
+                            <img src="image2/image 1.png"
+                                alt="image_1">
+
+                            <!-- Play Button -->
+                            <style>
+                                .play-btn {
+                                    width: 50px;
+                                    height: 50px;
+                                    background: red;
+                                    /* Red circle */
+                                    border-radius: 50%;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    cursor: pointer;
+                                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+                                    transition: 0.3s;
+
+                                    position: absolute;
+                                    /* Center on image */
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%);
+                                }
+
+                                .play-btn i {
+                                    color: white;
+                                    /* White play icon */
+                                    font-size: 28px;
+                                    margin-left: 5px;
+                                    /* Center the triangle visually */
+                                }
+
+                                .play-btn:hover {
+                                    background: green;
+                                    /* Hover effect */
+                                    transform: translate(-50%, -50%) scale(1.1);
+                                }
+                            </style>
+
+                            <div class="play-btn">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+
+                        </div>
+                    </a>
+                </div>
+
+                <div class="scroll-item">
+                    <a href="#" style="text-decoration: none;">
+                        <div class="movie-card" style="position: relative; display: inline-block;">
+                            <img src="image2/image 2.png"
+                                alt="image_2">
+
+
+                            <div class="play-btn">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="scroll-item">
+                    <a href="#" style="text-decoration: none;">
+                        <div class="movie-card" style="position: relative; display: inline-block;">
+                            <img src="image2/image 3.png"
+                                alt="image_3">
+                            <div class="play-btn">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="scroll-item">
+                <a href="#" style="text-decoration: none;">
+                    <div class="movie-card" style="position: relative; display: inline-block;">
+                        <img src="image2/image 4.PNG"
+                            alt="image_4">
+                        <div class="play-btn">
+                            <i class="fa-solid fa-play"></i>
+                        </div>
+                </a>
+            </div>
+            </div>
+
+            <div class="scroll-item">
+                <a href="#" style="text-decoration: none;">
+                    <div class="movie-card" style="position: relative; display: inline-block;">
+                        <img src="image2/image 5.JPG"
+                            alt="image_5">
+                        <div class="play-btn">
+                            <i class="fa-solid fa-play"></i>
+                        </div>
+                </a>
+            </div>
+            </div>
+
+            </div>
+        </section>
+
+        <!-- Popular Content -->
+
+        <section class="mb-5  mt-3">
+            <h4 class="section-title">Movies</h4>
+            <div class="scroll-container">
+                <div class="scroll-item">
+                    <a href="#" style="text-decoration: none;">
+                        <div class="movie-card" style="position: relative; display: inline-block;">
+
+                            <!-- Movie Poster -->
+                            <img src="image/image 1.jpg"
+                                alt="image_1">
+
+                            <!-- Play Button -->
+                            <style>
+                                .play-btn {
+                                    width: 50px;
+                                    height: 50px;
+                                    background: red;
+                                    /* Red circle */
+                                    border-radius: 50%;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    cursor: pointer;
+                                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+                                    transition: 0.3s;
+
+                                    position: absolute;
+                                    /* Center on image */
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%);
+                                }
+
+                                .play-btn i {
+                                    color: white;
+                                    /* White play icon */
+                                    font-size: 28px;
+                                    margin-left: 5px;
+                                    /* Center the triangle visually */
+                                }
+
+                                .play-btn:hover {
+                                    background: green;
+                                    /* Hover effect */
+                                    transform: translate(-50%, -50%) scale(1.1);
+                                }
+                            </style>
+
+                            <div class="play-btn">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+
+                        </div>
+                    </a>
+                </div>
+
+                <div class="scroll-item">
+                    <a href="#" style="text-decoration: none;">
+                        <div class="movie-card" style="position: relative; display: inline-block;">
+                            <img src="image/image 2.jpg"
+                                alt="image_2">
+
+
+                            <div class="play-btn">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="scroll-item">
+                    <a href="#" style="text-decoration: none;">
+                        <div class="movie-card" style="position: relative; display: inline-block;">
+                            <img src="image/image 3.jpg"
+                                alt="image_3">
+                            <div class="play-btn">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="scroll-item">
+                <a href="#" style="text-decoration: none;">
+                    <div class="movie-card" style="position: relative; display: inline-block;">
+                        <img src="image/image 4.jpg"
+                            alt="image_4">
+                        <div class="play-btn">
+                            <i class="fa-solid fa-play"></i>
+                        </div>
+                </a>
+            </div>
+            </div>
+
+            <div class="scroll-item">
+                <a href="#" style="text-decoration: none;">
+                    <div class="movie-card" style="position: relative; display: inline-block;">
+                        <img src="image/image 5.png"
+                            alt="image_5">
+                        <div class="play-btn">
+                            <i class="fa-solid fa-play"></i>
+                        </div>
+                </a>
+            </div>
+            </div>
+
+            </div>
+        </section>
+       
+
+        <!-- Genres -->
+        <section class="mb-5">
+            <h4 class="section-title">Browse by Genre</h4>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-sm btn-outline-light">Action</button>
+                <button class="btn btn-sm btn-outline-light">Drama</button>
+                <button class="btn btn-sm btn-outline-light">Comedy</button>
+                <button class="btn btn-sm btn-outline-light">Romance</button>
+                <button class="btn btn-sm btn-outline-light">Sci-Fi</button>
+                <button class="btn btn-sm btn-outline-light">Documentary</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p>Questions? Call <a href="tel:1840123456" class="text-decoration-none">1840-123-456</a></p>
+                <small class="d-block">© 2025 withfamily</small>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <div class="d-flex flex-column flex-md-row justify-content-md-end gap-2">
+                    <small><a href="#" class="text-decoration-none">Privacy</a></small>
+                    <small><a href="#" class="text-decoration-none">Terms</a></small>
+                    <small><a href="#" class="text-decoration-none">Help</a></small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Sign In</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <input class="form-control" placeholder="Email or phone" required>
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control" placeholder="Password" type="password" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Sign In</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trailer Modal -->
+    <div class="modal fade" id="playModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content bg-black">
+                <div class="modal-body p-0 position-relative">
+                    <button type="button" class="btn-close btn-close-white position-absolute m-3"
+                        data-bs-dismiss="modal" style="z-index:4"></button>
+                    <div style="padding-top:56.25%">
+                        <iframe width="560" height="315"
+                            src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=tBC1MxQT3Zdhhidp"
+                            title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Search functionality
+        function doSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                alert('Please enter a search term');
+                return;
+            }
+            alert('Searching for: ' + query + ' (demo)');
+        }
+
+        // Play trailer
+        function playTrailer() {
+            const modal = new bootstrap.Modal(document.getElementById('playModal'));
+            modal.show();
+        }
+
+        // Add to list
+        function addToList() {
+            alert('Added to your list (demo)');
+        }
+
+        // Reset video when modal closes
+        const playModal = document.getElementById('playModal');
+        if (playModal) {
+            playModal.addEventListener('hidden.bs.modal', () => {
+                const iframe = document.getElementById('trailerFrame');
+                iframe.dQw4w9WgXcQ = iframe.dQw4w9WgXcQ // Reset playback
+            });
+        }
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('Signed in successfully (demo)');
+            bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+        });
+    </script>
+</body>
+
+</html>
