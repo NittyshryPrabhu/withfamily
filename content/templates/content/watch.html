@@ -170,7 +170,7 @@
                     {% endif %}
                     </div>
                 </div>
-
+<Br><Br>
                 <div class="card-body wf-info" id="wfInfo">
                     {% if item.thumbnail %}
                         <img src="{{ item.thumbnail.url }}"
@@ -180,7 +180,7 @@
                     {% endif %}
 
                     <h3 class="card-title">{{ item.title }}</h3>
-                    <p class="card-text">{{ item.description }}</p>
+                    <div class="card-text">{{ item.description|linebreaks }}</div>
 
                     <div class="wf-meta-row">
                         <span class="wf-chip"><i class="fa-solid fa-film"></i> {{ item.content_type }}</span>

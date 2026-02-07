@@ -4,7 +4,7 @@
 <div class="container mt-5">
     <div class="text-center mb-4">
         <h2 class="mb-2">Choose Your Plan</h2>
-        <p class="text-muted">Upgrade anytime. Free plan gives limited access.</p>
+        <p class="plan-muted">Upgrade anytime. Free plan gives limited access.</p>
     </div>
 
     <div class="plan-grid">
@@ -13,7 +13,7 @@
             {% if plan.key != 'free' %}
                 <span class="plan-badge">Most Popular</span>
             {% endif %}
-            <h4 class="mb-0">{{ plan.label }}</h4>
+            <h4 class="mb-0 plan-title">{{ plan.label }}</h4>
             <div class="plan-price">
                 {% if plan.key == 'free' %}
                     Free
@@ -21,8 +21,8 @@
                     {{ currency }} {{ plan.amount_inr }} / mo
                 {% endif %}
             </div>
-            <p class="text-muted mb-2">{{ plan.description }}</p>
-            <ul class="text-muted mb-4">
+            <p class="plan-muted mb-2 plan-description">{{ plan.description }}</p>
+            <ul class="plan-features">
                 <li>Free: Watch selected titles</li>
                 <li>Basic: Unlock more content</li>
                 <li>Premium: Full access to everything</li>

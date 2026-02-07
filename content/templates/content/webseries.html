@@ -27,6 +27,8 @@
         border-radius: 12px;
         transition: .3s;
         height: 100%;
+        display: flex;
+        flex-direction: column;
     }
 
     .ott-card:hover {
@@ -75,11 +77,35 @@
     .card-info {
         padding: 12px;
         color: #fff;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
     }
 
     .card-info p {
         color: #b5b5b5;
         font-size: 13px;
+    }
+
+    .card-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .card-title {
+        margin: 0;
+        line-height: 1.25;
+        min-height: 2.5em;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .card-info form {
+        margin-top: auto;
     }
 </style>
 
@@ -118,8 +144,8 @@
                     </div>
                 </div>
                 <div class="card-info">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="mb-0">{{ series.title }}</h6>
+                    <div class="card-head">
+                        <h6 class="card-title">{{ series.title }}</h6>
                         <span class="wf-tag">{{ series.access_level|title }}</span>
                     </div>
                     <p>{{ series.description|truncatewords:15 }}</p>

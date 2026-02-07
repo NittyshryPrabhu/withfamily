@@ -132,6 +132,33 @@ body {
   gap: 16px;
 }
 
+.plan-title {
+  line-height: 1.25;
+  min-height: 2.5em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.plan-muted {
+  color: var(--wf-muted) !important;
+}
+
+.plan-description {
+  min-height: 3em;
+}
+
+.plan-features {
+  color: var(--wf-muted);
+  padding-left: 1.2rem;
+  margin-bottom: 1.25rem;
+}
+
+.plan-card form {
+  margin-top: auto;
+}
+
 .plan-price {
   font-size: 32px;
   font-weight: 700;

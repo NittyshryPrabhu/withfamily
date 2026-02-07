@@ -100,12 +100,12 @@ SUBSCRIPTION_PLANS = {
     },
     'basic': {
         'label': 'Basic',
-        'amount_inr': 4,
+        'amount_inr': 50,
         'description': 'Unlock more movies, series and podcasts.',
     },
     'premium': {
         'label': 'Premium',
-        'amount_inr': 9,
+        'amount_inr': 90,
         'description': 'Full access to all content and new releases.',
     },
 }
