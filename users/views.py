@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .models import UserProfile, PaymentTransaction, Watchlist, WatchHistory
-from .forms import RegisterForm
+from .forms import RegisterForm, EditProfileForm
 import razorpay
 from content.models import Content
 from django.shortcuts import get_object_or_404
@@ -78,18 +78,16 @@ def edit_profile(request):
     profile, _ = UserProfile.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
-        profile.bio = request.POST.get('bio')
-        profile.mobile = request.POST.get('mobile')
-        profile.dob = request.POST.get('dob')
+        form = EditProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully!")
+            return redirect('profile')
+        messages.error(request, "Please fill all required details correctly.")
+    else:
+        form = EditProfileForm(instance=profile)
 
-        if request.FILES.get('avatar'):
-            profile.avatar = request.FILES.get('avatar')
-
-        profile.save()
-        messages.success(request, "Profile updated successfully!")
-        return redirect('profile')
-
-    return render(request, 'users/edit_profile.html', {'profile': profile})
+    return render(request, 'users/edit_profile.html', {'profile': profile, 'form': form})
 
 
 # ---------------- CHOOSE PLAN ----------------
